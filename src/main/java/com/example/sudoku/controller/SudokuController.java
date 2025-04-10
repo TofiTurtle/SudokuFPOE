@@ -5,8 +5,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-public class SudokuController {
 
+public class SudokuController {
     @FXML
     private GridPane boardGridPane;
 
@@ -19,6 +19,8 @@ public class SudokuController {
 
     private void fillBoard() {
         board = new Board();
+        board.printBoard();
+
         for (int row = 0; row < board.getBoard().size(); row++) {
             for (int col = 0; col < board.getBoard().size(); col++) {
                 int number = board.getBoard().get(row).get(col);
@@ -36,14 +38,18 @@ public class SudokuController {
                 boardGridPane.setRowIndex(textField, row);
                 boardGridPane.setColumnIndex(textField, col);
                 boardGridPane.getChildren().add(textField);
-                handleNumberTextField(textField);
+                handleNumberTextField(textField, row, col);
             }
         }
     }
 
-    private void handleNumberTextField(TextField textField) {
+    private void handleNumberTextField(TextField textField , int row, int col) {
         textField.setOnKeyReleased(event -> {
-            System.out.println(textField.getText());
+            String number = textField.getText();
+            if(!number.equals("")){
+                System.out.println(board.isValid(row, col, Integer.parseInt(number)));
+            }
+
         });
     }
 
