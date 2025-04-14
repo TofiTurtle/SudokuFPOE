@@ -15,7 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
 import java.awt.event.MouseEvent;
@@ -37,6 +37,8 @@ public class SudokuController {
 
     private Board board;
 
+    private TextField[][] textFields = new TextField[6][6];
+
     private int counterHelp = 0;
 
     Font baseFont = Font.loadFont(getClass().getResourceAsStream("/com/example/sudoku/font/minecraft_font.ttf"), 10);
@@ -50,9 +52,45 @@ public class SudokuController {
 
         }
 
+        Platform.runLater(() -> {
+            Scene scene = boardGridPane.getScene();
+            if (scene != null) {
+                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/sudoku/images/icons8-espada-de-minecraft-30.png")));
+                scene.setCursor(new ImageCursor(image));
+            }
+        });
+
         fillBoard();
         handleHelp();
 
+    }
+
+    //ARREGLO CON LAS 3 IMAGENES
+    private final String[] BACKGROUND_IMAGES = {
+            "/com/example/sudoku/images/piedra.jpg",
+            "/com/example/sudoku/images/cesped.jpg",
+            "/com/example/sudoku/images/tierra.jpg"
+    };
+
+    //GENERA UNA IMAGEN RAMDON CON EL ARREGLO
+    private Image getRandomBackgroundImage() {
+        Random random = new Random();
+        String randomImagePath = BACKGROUND_IMAGES[random.nextInt(BACKGROUND_IMAGES.length)];
+        return new Image(Objects.requireNonNull(getClass().getResourceAsStream(randomImagePath)));
+    }
+
+    private List<int[]> getEmptyCells() {
+        List<int[]> emptyCells = new ArrayList<>();//ARREGLO QUE GUARDA EL ARREGLO DE LAS TUPLAS
+
+        for (int i = 0; i < textFields.length; i++) {
+            for (int j = 0; j < textFields[i].length; j++) {
+                if (textFields[i][j].getText().isEmpty()) {
+                    emptyCells.add(new int[]{i, j});   //ESTO CREA UN ARREGLO Y LUEGO LO METE AL ARREGLO Q YA TENIAMOS
+                }
+            }
+        }
+
+        return emptyCells;
     }
 
     public void handleHelp() {
@@ -62,34 +100,41 @@ public class SudokuController {
             @Override
             public void handle(ActionEvent actionEvent) {
 
+                if (counterHelp < 5) {
+                    List<int[]> emptyCells = getEmptyCells();
 
-                int randomRow = rand.nextInt(6);
-                int randomCol = rand.nextInt(6);
-                int randomCandidate = rand.nextInt(6)+1;
-                //List<List<Integer>> myboard = board.getBoard();
+                    if(!emptyCells.isEmpty()) { //VERIFICA Q EL ARREGLO DE LAS POSICIONES NO ESTE VACIO JEJE
+                        int[] randomCell = emptyCells.get(rand.nextInt(emptyCells.size())); //SELECCIONA AL AZAR UN ARREGLO DEL ARREGLO
+                        int row = randomCell[0];
+                        int col = randomCell[1];
 
-                if (counterHelp < 8) { //allows the user to get 8 hints
-
-                        if (board.getBoard().get(randomRow).get(randomCol) == 0) {
-                            if (board.isValid(randomRow, randomCol, randomCandidate)) {
-                                board.getBoard().get(randomRow).set(randomCol, randomCandidate);
-                                System.out.println("PRUEBA, SE EJECUTA?");
+                        for (int i = 1; i <=6; i++) {
+                            if(board.isValid(row, col, i)) {
+                                board.getBoard().get(row).set(col, i);
+                                textFields[row][col].setText(String.valueOf(i));
                                 counterHelp++;
-
+                                break;
                             }
-
-                            //messageHelpLabel.setText("Ayudas disponibles: " + (4 - counterHelp));
-
                         }
+
+                    }
 
                 }
             }
-
         });
     }
+
+
     private void fillBoard() {
         board = new Board();
         board.printBoard();
+
+        Image backgroundImage = new Image(
+                Objects.requireNonNull(
+                        getClass().getResourceAsStream("/com/example/sudoku/images/piedra.jpg")
+                )
+        );
+
 
         for (int row = 0; row < board.getBoard().size(); row++) {
             for (int col = 0; col < board.getBoard().size(); col++) {
@@ -100,16 +145,30 @@ public class SudokuController {
                 textField.setBackground(null);
                 textField.setFont(Font.font(baseFont.getFamily(), 15));
 
-                if(number > 0){
+                if (number > 0) {
                     textField.setText(String.valueOf(number));
                     textField.setEditable(false);
+
+                    Image randomImage = getRandomBackgroundImage(); // CREO LA IMAGEN CON LA ALEATORIA Q ME DAN
+                    BackgroundImage bgImage = new BackgroundImage(
+                            randomImage,
+                            BackgroundRepeat.NO_REPEAT,
+                            BackgroundRepeat.NO_REPEAT,
+                            BackgroundPosition.CENTER,
+                            new BackgroundSize(40, 40, false, false, false, false)
+                    );
+                    // LA ES BGIMAGEN ES BASICAMENTE UN BACKGROUND DE LA IMAGEN QUE ME ESTAN DANDO
+                    textField.setBackground(new Background(bgImage)); // AQUI ASIGNO AL TEXT FIELD EL BG QUE CREE CON LA IMAGEN ALEATORIA
                 } else {
                     textField.setText("");
+                    textField.setBackground(null);
                 }
 
                 boardGridPane.setRowIndex(textField, row);
                 boardGridPane.setColumnIndex(textField, col);
                 boardGridPane.getChildren().add(textField);
+
+                textFields[row][col] = textField;
                 handleNumberTextField(textField, row, col);
             }
         }
