@@ -68,6 +68,7 @@ public class Board {
         int startRow = blockRow * BLOCK_ROWS;
         int startCol = blockCol * BLOCK_COLS;
 
+
         // Prepare a list of candidate numbers [1, 2, 3, 4, 5, 6] in random order.
         List<Integer> numbers = new ArrayList<>();
         for (int i = 1; i <= SIZE; i++) {
@@ -75,6 +76,59 @@ public class Board {
         }
         Collections.shuffle(numbers, random);
 
+
+        //bloque prueba*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*--**-*--*-*-*-
+        //new auxiliar var randInt to generate the second integer per block!
+
+        Random rand = new Random();
+        Random rand2 = new Random();
+
+        for (int i = startRow; i < startRow + BLOCK_ROWS; i++) {
+            for (int j = startCol; j < startCol + BLOCK_COLS; j++) {
+                //generates random positions for the block
+                int randomRow = startRow + rand.nextInt(BLOCK_ROWS);
+                int randomCol = startCol + rand.nextInt(BLOCK_COLS);
+
+                //verifies if the cell is empty fisrt
+                if (board.get(randomRow).get(randomCol) == 0) {
+                    //picks one number from our random list of candidates
+                    for (Integer number : numbers) {
+                        //tries our candidate number in our random position inside the block
+                        //and if it's valid, sets it and plays the recursivity, else, erases it
+                        if (isValid(randomRow, randomCol, number)) {
+                            board.get(randomRow).set(randomCol, number);
+
+                            for (Integer number2 : numbers) {
+                                int randomRow2 = startRow + rand2.nextInt(BLOCK_ROWS);
+                                int randomCol2 = startCol + rand2.nextInt(BLOCK_COLS);
+                                // Check if placing 'number' in cell (i, j) does not violate the row and column constraints.
+                                if (board.get(randomRow2).get(randomCol2) == 0) {
+                                   // if (isBlockValid(randomRow2,randomCol2 , number2)) {
+                                        if (isValid(randomRow2, randomCol2, number2)) {
+                                            board.get(randomRow2).set(randomCol2, number2);
+
+
+                                            // Recursively fill the next block.
+                                            if (fillBlocks(blockIndex + 1)) {
+                                                return true;
+                                            }
+                                            // Backtracking: reset the cell if subsequent placement fails.
+                                            board.get(randomRow2).set(randomCol2, 0);
+                                        }
+                                    //}
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+        //bloque prueba/*//*/-*-*-*-*--*-*-*--**-*--*-*-*-**-*--*-*-*-*-*-*--*-**-*
+
+        /**
         // Iterate over every cell in the current 2x3 block.
         for (int i = startRow; i < startRow + BLOCK_ROWS; i++) {
             for (int j = startCol; j < startCol + BLOCK_COLS; j++) {
@@ -83,18 +137,32 @@ public class Board {
                     // Check if placing 'number' in cell (i, j) does not violate the row and column constraints.
                     if (isValid(i, j, number)) {
                         board.get(i).set(j, number);
-                        // Recursively fill the next block.
-                        if (fillBlocks(blockIndex + 1)) {
-                            return true;
+
+                        for (Integer number2 : numbers) {
+                            // Check if placing 'number' in cell (i, j) does not violate the row and column constraints.
+                            if (isValid(i, j+1, number2)) {
+                                board.get(i).set(j+1, number2);
+
+
+                                // Recursively fill the next block.
+                                if (fillBlocks(blockIndex + 1)) {
+                                    return true;
+                                }
+                                // Backtracking: reset the cell if subsequent placement fails.
+                                board.get(i).set(j, 0);
+                            }
                         }
-                        // Backtracking: reset the cell if subsequent placement fails.
-                        board.get(i).set(j, 0);
+
                     }
                 }
             }
         }
         // If no valid placement was found for this block, return false.
         return false;
+         este bloque se comenta pues en este caso nos genera los numeros pero en las
+         dos primeras columnas, la idea seria randomizarlo xd, peeero por si acaso
+         dejemos esto aca
+         */
     }
 
     /**
@@ -119,6 +187,21 @@ public class Board {
             }
         }
         return true;
+    }
+    public boolean isBlockValid(int blockRow, int blockCol, int candidate) {
+        //we need this, to know in wich block we're moving
+        int startRow = blockRow * BLOCK_ROWS; //  BLOCK_ROWS = 2
+        int startCol = blockCol * BLOCK_COLS; //  BLOCK_COLS = 3
+
+        for (int i = startRow; i < startRow + BLOCK_ROWS; i++) {
+            for (int j = startCol; j < startCol + BLOCK_COLS; j++) {
+                //verifies if the candidate is already on the block
+                if (board.get(i).get(j) == candidate) {
+                    return false;
+                }
+            }
+        }
+        return true; //only returns true if the candidate isnt on that block
     }
 
     /**
