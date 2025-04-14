@@ -3,6 +3,8 @@ package com.example.sudoku.controller;
 import com.example.sudoku.model.Board;
 import com.example.sudoku.view.SudokuStage;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -18,7 +20,9 @@ import javafx.scene.text.Font;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.UnaryOperator;
 
 public class SudokuController {
@@ -33,6 +37,8 @@ public class SudokuController {
 
     private Board board;
 
+    private int counterHelp = 0;
+
     Font baseFont = Font.loadFont(getClass().getResourceAsStream("/com/example/sudoku/font/minecraft_font.ttf"), 10);
 
 
@@ -45,9 +51,42 @@ public class SudokuController {
         }
 
         fillBoard();
+        handleHelp();
+
     }
 
+    public void handleHelp() {
+        Random rand = new Random(); //we need this to generate a random valid number
 
+        hintButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+
+                int randomRow = rand.nextInt(6);
+                int randomCol = rand.nextInt(6);
+                int randomCandidate = rand.nextInt(6)+1;
+                //List<List<Integer>> myboard = board.getBoard();
+
+                if (counterHelp < 8) { //allows the user to get 8 hints
+
+                        if (board.getBoard().get(randomRow).get(randomCol) == 0) {
+                            if (board.isValid(randomRow, randomCol, randomCandidate)) {
+                                board.getBoard().get(randomRow).set(randomCol, randomCandidate);
+                                System.out.println("PRUEBA, SE EJECUTA?");
+                                counterHelp++;
+
+                            }
+
+                            //messageHelpLabel.setText("Ayudas disponibles: " + (4 - counterHelp));
+
+                        }
+
+                }
+            }
+
+        });
+    }
     private void fillBoard() {
         board = new Board();
         board.printBoard();
