@@ -173,6 +173,7 @@ public class Board {
      * @param candidate the number to place (from 1 to 6).
      * @return true if the candidate can be placed without conflict; false otherwise.
      */
+
     public boolean isValid(int row, int col, int candidate) {
         // Check the current row for an existing occurrence of the candidate.
         for (int j = 0; j < SIZE; j++) {
@@ -186,22 +187,21 @@ public class Board {
                 return false;
             }
         }
-        return true;
-    }
-    public boolean isBlockValid(int blockRow, int blockCol, int candidate) {
-        //we need this, to know in wich block we're moving
-        int startRow = blockRow * BLOCK_ROWS; //  BLOCK_ROWS = 2
-        int startCol = blockCol * BLOCK_COLS; //  BLOCK_COLS = 3
 
-        for (int i = startRow; i < startRow + BLOCK_ROWS; i++) {
-            for (int j = startCol; j < startCol + BLOCK_COLS; j++) {
-                //verifies if the candidate is already on the block
-                if (board.get(i).get(j) == candidate) {
-                    return false;
+        //ES LA VERIFICACION DE LOS BLOQUES
+        int startRow = (row / BLOCK_ROWS) * BLOCK_ROWS; //ESTO LO TUVE QUE BUSCAR Y BASICAMENTE DIVIDE LA FILA ACTUAL (POR ESO EL ROW) Y LO MULTIPLICA POR 2
+        //SEGUN LO QUE ENTENDU ES PARA ENCONTRAR LA FILA EN DONDE SE ENCUENTRA EL BLOQUE
+        int startCol = (col / BLOCK_COLS) * BLOCK_COLS; //LO MISMO PERO CON COLUMNAS AKLJSDJKASD
+
+        for (int r = startRow; r < startRow + BLOCK_ROWS; r++) { //RECORRE LOS BLOQUES
+            for (int c = startCol; c < startCol + BLOCK_COLS; c++) {
+                if (board.get(r).get(c) == candidate) {
+                    return false; //CUANDO ENCUENTRA EN ESE BLOQUE EL NUMERO QUE SE LE INGRESA (RECORDAR QUE ESTO ESTA DENTRO DE UNA FUNCION) DEVUELVE FALSE
                 }
             }
         }
-        return true; //only returns true if the candidate isnt on that block
+
+        return true;
     }
 
     /**
