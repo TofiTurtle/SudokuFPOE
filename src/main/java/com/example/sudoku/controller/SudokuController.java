@@ -67,6 +67,7 @@ public class SudokuController {
     public void initialize() {
         if (baseFont != null) {
             titleLabel.setFont(Font.font(baseFont.getFamily(), 30));
+            titleLabel.setStyle("-fx-font-weight: bold;");
             hintButton.setFont(Font.font(baseFont.getFamily(), 20));
             instructionsButton.setFont(Font.font(baseFont.getFamily(), 20));
         }
@@ -85,21 +86,18 @@ public class SudokuController {
 
     }
 
-    //ARREGLO CON LAS 3 IMAGENES
-    /** ojo vivo, esta cosita pq si
-    private final String[] BACKGROUND_IMAGES = {
-            "/com/example/sudoku/images/piedra.jpg",
-            "/com/example/sudoku/images/cesped.jpg",
-            "/com/example/sudoku/images/tierra.jpg"
-    };
+    Image fuegoImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
+            "/com/example/sudoku/images/fuego1.PNG"
+    )));
 
-    //GENERA UNA IMAGEN RAMDON CON EL ARREGLO
-    private Image getRandomBackgroundImage() {
-        Random random = new Random();
-        String randomImagePath = BACKGROUND_IMAGES[random.nextInt(BACKGROUND_IMAGES.length)];
-        return new Image(Objects.requireNonNull(getClass().getResourceAsStream(randomImagePath)));
-    }
-     */
+    Image randomImage = fuegoImage;
+    BackgroundImage bgImage = new BackgroundImage(
+            randomImage,
+            BackgroundRepeat.NO_REPEAT,
+            BackgroundRepeat.NO_REPEAT,
+            BackgroundPosition.DEFAULT,
+            new BackgroundSize(85, 60, false, false, false, false)
+    );
 
     private List<int[]> getEmptyCells() {
         List<int[]> emptyCells = new ArrayList<>();//ARREGLO QUE GUARDA EL ARREGLO DE LAS TUPLAS
@@ -132,6 +130,7 @@ public class SudokuController {
 
                         for (int i = 1; i <=6; i++) {
                             if(board.isValid(row, col, i)) {
+                                counterHelp++;
                                 board.getBoard().get(row).set(col, i);
                                 textFields[row][col].setText(String.valueOf(i));
                                 auxiliarTotemCounter++;
@@ -150,13 +149,15 @@ public class SudokuController {
                                     break;
                                 }
 
-                                counterHelp++;
                                 break;
                             }
                         }
 
                     }
 
+                }
+                if (counterHelp == 6) {
+                    hintButton.setDisable(true);
                 }
             }
         });
@@ -178,27 +179,17 @@ public class SudokuController {
             for (int col = 0; col < board.getBoard().size(); col++) {
                 int number = board.getBoard().get(row).get(col);
                 TextField textField = new TextField();
-                textField.setPrefHeight(40);
+                textField.setPrefHeight(90);
                 textField.setAlignment(Pos.CENTER);
                 textField.setBackground(null);
-                textField.setFont(Font.font(baseFont.getFamily(), 15));
+                textField.setFont(Font.font(baseFont.getFamily(), 20));
+                textField.setText("-fx-font-weight: bold;");
 
                 if (number > 0) {
                     textField.setText(String.valueOf(number));
                     textField.setEditable(false);
 
-                    /**
-                    Image randomImage = getRandomBackgroundImage(); // CREO LA IMAGEN CON LA ALEATORIA Q ME DAN
-                    BackgroundImage bgImage = new BackgroundImage(
-                            randomImage,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.CENTER,
-                            new BackgroundSize(40, 40, false, false, false, false)
-                    );
-                    // LA ES BGIMAGEN ES BASICAMENTE UN BACKGROUND DE LA IMAGEN QUE ME ESTAN DANDO
-                    textField.setBackground(new Background(bgImage)); // AQUI ASIGNO AL TEXT FIELD EL BG QUE CREE CON LA IMAGEN ALEATORIA
-                     */
+
                 } else {
                     textField.setText("");
                     textField.setBackground(null);
@@ -240,11 +231,15 @@ public class SudokuController {
                     board.getBoard().get(row).set(col, number); //SI EL NUMERO ES VALIDO ACTUALIZA EL TABLERO (EL ARREGLO)
                     textField.setStyle(""); //QUITA CUALQUIER ERROR (O SEA MODIFICA DE NUEVO EL TEXT FIELD PARA QUE ESTE TRANSPARENTE
                 } else {
-                    textField.setStyle("-fx-border-color: red; -fx-border-width: 2px;"); //SI EL NUMERO NO ES VALIDO (O SEA QUE SI HAY ALGUN ERROR DE COMPARACION PONE EL TEXTFIELD EN ROJO)
+                     // LA ES BGIMAGEN ES BASICAMENTE UN BACKGROUND DE LA IMAGEN QUE ME ESTAN DANDO
+                     textField.setBackground(new Background(bgImage)); // AQUI ASIGNO AL TEXT FIELD EL BG QUE CREE CON LA IMAGEN ALEATORIA
+
+                    //SI EL NUMERO NO ES VALIDO (O SEA QUE SI HAY ALGUN ERROR DE COMPARACION PONE EL TEXTFIELD EN ROJO)
                 }
                 System.out.println(isValid); //ESTO SIMPLEMENTE ES PQ ESTABA HACIENDO UNAS PRUEBAS CON LA FUNCION ISVALID
             } else {
                 //CUANDO EL CAMPO NO SE LE INGRESA NADA O ESTE VACIO (INCLUSIVE CUANDO SE BORRA EL NUMERO) PONE UN CERO EN EL ARREGLO Y LE QUITA LOS BORDES AL TEXT FIELD
+                textField.setBackground(null);
                 board.getBoard().get(row).set(col, 0);
                 textField.setStyle("-fx-border-width: 0px;");
             }
