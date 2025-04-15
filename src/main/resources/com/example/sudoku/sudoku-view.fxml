@@ -9,15 +9,21 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="720.0" style="-fx-background-color: ;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sudoku.controller.SudokuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="720.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sudoku.controller.SudokuController">
     <children>
-      <ImageView fitHeight="500.0" fitWidth="720.0" pickOnBounds="true">
+      <ImageView fitHeight="500.0" fitWidth="720.0" opacity="0.75" pickOnBounds="true">
          <image>
-            <Image url="@images/backgroundImage1.jpg" />
+            <Image url="@images/backgroundImage1.png" />
          </image>
       </ImageView>
-        <GridPane fx:id="boardGridPane" gridLinesVisible="true" layoutX="58.0" layoutY="86.0" prefHeight="374.0" prefWidth="374.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="288.0" AnchorPane.topAnchor="86.0">
+      <ImageView fitHeight="374.0" fitWidth="374.0" layoutX="58.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/boardcherry1.png" />
+         </image>
+      </ImageView>
+        <GridPane fx:id="boardGridPane" alignment="CENTER" gridLinesVisible="true" layoutX="58.0" layoutY="86.0" prefHeight="374.0" prefWidth="374.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="288.0" AnchorPane.topAnchor="86.0">
             <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -35,30 +41,33 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
-        <Label fx:id="titleLabel" alignment="CENTER" layoutX="-118.0" layoutY="36.0" text="SUDOKUCRAFT" AnchorPane.leftAnchor="-118.0" AnchorPane.rightAnchor="118.0" AnchorPane.topAnchor="36.0" />
+        <Label fx:id="titleLabel" alignment="CENTER" layoutX="-118.0" layoutY="36.0" text="SUDOKUCRAFT" textFill="#ffffffd9" AnchorPane.leftAnchor="-118.0" AnchorPane.rightAnchor="118.0" AnchorPane.topAnchor="36.0">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
 
-        <Button fx:id="hintButton" layoutX="530.0" layoutY="86.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefWidth="100.0" style="-fx-background-color: #876757; -fx-text-fill: #3a3617; -fx-cursor: url('com/example/sudoku/images/icons8-pico-de-minecraft-30.png'), auto;" text="PISTA" AnchorPane.bottomAnchor="389.0" AnchorPane.leftAnchor="530.0" />
-      <ImageView fitHeight="68.0" fitWidth="94.0" layoutX="546.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true">
+        <Button fx:id="hintButton" layoutX="530.0" layoutY="186.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefWidth="100.0" style="-fx-background-color: #876757; -fx-text-fill: #3a3617; -fx-cursor: url('com/example/sudoku/images/icons8-pico-de-minecraft-30.png'), auto;" text="PISTA" AnchorPane.bottomAnchor="289.0" AnchorPane.leftAnchor="530.0" />
+      <ImageView fx:id="totem4" fitHeight="68.0" fitWidth="94.0" layoutX="478.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/toteminmortality.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="68.0" fitWidth="94.0" layoutX="471.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="totem1" fitHeight="68.0" fitWidth="94.0" layoutX="478.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/toteminmortality.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="68.0" fitWidth="94.0" layoutX="546.0" layoutY="333.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="totem5" fitHeight="68.0" fitWidth="94.0" layoutX="546.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/toteminmortality.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="68.0" fitWidth="94.0" layoutX="614.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="totem2" fitHeight="68.0" fitWidth="94.0" layoutX="546.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/toteminmortality.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="68.0" fitWidth="94.0" layoutX="546.0" layoutY="222.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="totem3" fitHeight="68.0" fitWidth="94.0" layoutX="614.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/toteminmortality.png" />
          </image>
@@ -66,6 +75,21 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="3.5" layoutX="58.0" layoutY="211.0" stroke="BLACK" strokeType="INSIDE" width="374.0" AnchorPane.bottomAnchor="284.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="288.0" AnchorPane.topAnchor="211.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="3.5" layoutX="57.0" layoutY="333.0" stroke="BLACK" strokeType="INSIDE" width="374.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="374.5" layoutX="242.0" layoutY="85.0" stroke="BLACK" strokeType="INSIDE" width="3.5" />
+      <ImageView fx:id="totem6" fitHeight="68.0" fitWidth="94.0" layoutX="614.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/toteminmortality.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="instructionsButton" layoutX="498.0" layoutY="109.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="160.0" style="-fx-background-color: #fba1e7;" text="REGLAS        .     -" textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="354.0" AnchorPane.leftAnchor="498.0">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Button>
+      <ImageView fitHeight="43.0" fitWidth="47.0" layoutX="609.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/instructionsimage.png" />
+         </image>
+      </ImageView>
 
     </children>
 </AnchorPane>

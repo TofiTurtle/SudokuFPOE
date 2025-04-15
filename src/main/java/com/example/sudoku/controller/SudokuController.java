@@ -10,11 +10,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
@@ -35,11 +33,32 @@ public class SudokuController {
     @FXML
     private Button hintButton;
 
+    @FXML
+    private Button instructionsButton;
+
     private Board board;
 
     private TextField[][] textFields = new TextField[6][6];
 
     private int counterHelp = 0;
+
+    //ola este pedazo de codigo es pa los totemcitos xd
+    @FXML
+    private ImageView totem1;
+    @FXML
+    private ImageView totem2;
+    @FXML
+    private ImageView totem3;
+    @FXML
+    private ImageView totem4;
+    @FXML
+    private ImageView totem5;
+    @FXML
+    private ImageView totem6;
+
+    private int auxiliarTotemCounter = 0;
+    private Image UsedTotemImage = new Image(getClass().getResource("/com/example/sudoku/images/Usedtoteminmortality.png").toExternalForm());
+    //hasta aqui llega la implementacion de la imagen del totem
 
     Font baseFont = Font.loadFont(getClass().getResourceAsStream("/com/example/sudoku/font/minecraft_font.ttf"), 10);
 
@@ -49,7 +68,7 @@ public class SudokuController {
         if (baseFont != null) {
             titleLabel.setFont(Font.font(baseFont.getFamily(), 30));
             hintButton.setFont(Font.font(baseFont.getFamily(), 20));
-
+            instructionsButton.setFont(Font.font(baseFont.getFamily(), 20));
         }
 
         Platform.runLater(() -> {
@@ -62,10 +81,12 @@ public class SudokuController {
 
         fillBoard();
         handleHelp();
+        handleInstructions();
 
     }
 
     //ARREGLO CON LAS 3 IMAGENES
+    /** ojo vivo, esta cosita pq si
     private final String[] BACKGROUND_IMAGES = {
             "/com/example/sudoku/images/piedra.jpg",
             "/com/example/sudoku/images/cesped.jpg",
@@ -78,6 +99,7 @@ public class SudokuController {
         String randomImagePath = BACKGROUND_IMAGES[random.nextInt(BACKGROUND_IMAGES.length)];
         return new Image(Objects.requireNonNull(getClass().getResourceAsStream(randomImagePath)));
     }
+     */
 
     private List<int[]> getEmptyCells() {
         List<int[]> emptyCells = new ArrayList<>();//ARREGLO QUE GUARDA EL ARREGLO DE LAS TUPLAS
@@ -100,7 +122,7 @@ public class SudokuController {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                if (counterHelp < 5) {
+                if (counterHelp < 6) {
                     List<int[]> emptyCells = getEmptyCells();
 
                     if(!emptyCells.isEmpty()) { //VERIFICA Q EL ARREGLO DE LAS POSICIONES NO ESTE VACIO JEJE
@@ -112,6 +134,22 @@ public class SudokuController {
                             if(board.isValid(row, col, i)) {
                                 board.getBoard().get(row).set(col, i);
                                 textFields[row][col].setText(String.valueOf(i));
+                                auxiliarTotemCounter++;
+                                switch (auxiliarTotemCounter) {
+                                    case 1: totem1.setImage(UsedTotemImage);
+                                    break;
+                                    case 2: totem2.setImage(UsedTotemImage);
+                                    break;
+                                    case 3: totem3.setImage(UsedTotemImage);
+                                    break;
+                                    case 4: totem4.setImage(UsedTotemImage);
+                                    break;
+                                    case 5: totem5.setImage(UsedTotemImage);
+                                    break;
+                                    case 6: totem6.setImage(UsedTotemImage);
+                                    break;
+                                }
+
                                 counterHelp++;
                                 break;
                             }
@@ -149,6 +187,7 @@ public class SudokuController {
                     textField.setText(String.valueOf(number));
                     textField.setEditable(false);
 
+                    /**
                     Image randomImage = getRandomBackgroundImage(); // CREO LA IMAGEN CON LA ALEATORIA Q ME DAN
                     BackgroundImage bgImage = new BackgroundImage(
                             randomImage,
@@ -159,6 +198,7 @@ public class SudokuController {
                     );
                     // LA ES BGIMAGEN ES BASICAMENTE UN BACKGROUND DE LA IMAGEN QUE ME ESTAN DANDO
                     textField.setBackground(new Background(bgImage)); // AQUI ASIGNO AL TEXT FIELD EL BG QUE CREE CON LA IMAGEN ALEATORIA
+                     */
                 } else {
                     textField.setText("");
                     textField.setBackground(null);
@@ -223,5 +263,17 @@ public class SudokuController {
         if (scene != null) {
             scene.setCursor(new ImageCursor(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/sudoku/images/icons8-espada-de-minecraft-30.png")))));
         }
+    }
+    public void handleInstructions() {
+        instructionsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("Instructions");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("-----INSTRUCCIONES-----");
+                alert.setHeaderText("1. tralalero tralala\n2.brr brr patapim\n3.lirili larila");
+                alert.showAndWait();
+            }
+        });
     }
 }
