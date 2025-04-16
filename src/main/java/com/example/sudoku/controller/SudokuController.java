@@ -74,7 +74,7 @@ public class SudokuController extends SudokuLogicAdapter {
         });
 
         fillBoard();
-        handleHelp();
+        hintButton.setOnAction(new HintButtonHandler()); //cambio de clase interna
         handleInstructions();
 
     }
@@ -106,55 +106,44 @@ public class SudokuController extends SudokuLogicAdapter {
         return emptyCells;
     }
 
-    public void handleHelp() {
-        Random rand = new Random(); //we need this to generate a random valid number
+    private class HintButtonHandler implements EventHandler<ActionEvent> {
+        private final Random rand = new Random();
 
-        hintButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            if (counterHelp < 6) {
+                List<int[]> emptyCells = getEmptyCells();
+                if (!emptyCells.isEmpty()) {
+                    int[] randomCell = emptyCells.get(rand.nextInt(emptyCells.size()));
+                    int row = randomCell[0];
+                    int col = randomCell[1];
 
-                if (counterHelp < 6) {
-                    List<int[]> emptyCells = getEmptyCells();
+                    for (int i = 1; i <= 6; i++) {
+                        if (board.isValid(row, col, i)) {
+                            counterHelp++;
+                            board.getBoard().get(row).set(col, i);
+                            textFields[row][col].setText(String.valueOf(i));
+                            textFields[row][col].setStyle("-fx-text-fill: #553d23; -fx-font-size: 22px; -fx-effect: dropshadow(three-pass-box, white, 2, 1, 0, 0);");
 
-                    if(!emptyCells.isEmpty()) { //VERIFICA Q EL ARREGLO DE LAS POSICIONES NO ESTE VACIO JEJE
-                        int[] randomCell = emptyCells.get(rand.nextInt(emptyCells.size())); //SELECCIONA AL AZAR UN ARREGLO DEL ARREGLO
-                        int row = randomCell[0];
-                        int col = randomCell[1];
-
-                        for (int i = 1; i <=6; i++) {
-                            if(board.isValid(row, col, i)) {
-                                counterHelp++;
-                                board.getBoard().get(row).set(col, i);
-                                textFields[row][col].setText(String.valueOf(i));
-                                textFields[row][col].setStyle("-fx-text-fill: #553d23; " + "-fx-font-size: 22px;" +   "-fx-effect: dropshadow(three-pass-box, white, 2, 1, 0, 0);");
-                                auxiliarTotemCounter++;
-                                switch (auxiliarTotemCounter) {
-                                    case 1: totem1.setImage(UsedTotemImage);
-                                    break;
-                                    case 2: totem2.setImage(UsedTotemImage);
-                                    break;
-                                    case 3: totem3.setImage(UsedTotemImage);
-                                    break;
-                                    case 4: totem4.setImage(UsedTotemImage);
-                                    break;
-                                    case 5: totem5.setImage(UsedTotemImage);
-                                    break;
-                                    case 6: totem6.setImage(UsedTotemImage);
-                                    break;
-                                }
-
-                                break;
+                            auxiliarTotemCounter++;
+                            switch (auxiliarTotemCounter) {
+                                case 1 -> totem1.setImage(UsedTotemImage);
+                                case 2 -> totem2.setImage(UsedTotemImage);
+                                case 3 -> totem3.setImage(UsedTotemImage);
+                                case 4 -> totem4.setImage(UsedTotemImage);
+                                case 5 -> totem5.setImage(UsedTotemImage);
+                                case 6 -> totem6.setImage(UsedTotemImage);
                             }
+
+                            break;
                         }
-
                     }
-
-                }
-                if (counterHelp == 6) {
-                    hintButton.setDisable(true);
                 }
             }
-        });
+            if (counterHelp == 6) {
+                hintButton.setDisable(true);
+            }
+        }
     }
 
 
@@ -271,7 +260,7 @@ public class SudokuController extends SudokuLogicAdapter {
                         "\n----CONSIDERACIONES ADICIONALES----" +
                         "\n* Usted cuenta con un boton llamado 'Pista', al presionarlo se le brindara una ayuda resolviendo una celda aleatoria del tablero, la cual estara resaltada con un borde brillante blanco"+
                                 "\n* Cuando ingrese numeros no validos, ya sea por repeticion de bloque, fila o columna, su celda se vera 'en llamas' y con un borde rojo, este no desaparecera hasta que realice la respectiva correcion" +
-                        "\n* Mucha suerte! <3");
+                        "\n* Mucha suerte! <3 |-|l-||-|_");
                 alert.showAndWait();
             }
         });
