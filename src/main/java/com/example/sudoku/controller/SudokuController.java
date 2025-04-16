@@ -1,13 +1,11 @@
 package com.example.sudoku.controller;
 
 import com.example.sudoku.model.Board;
-import com.example.sudoku.view.SudokuStage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,8 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,13 +22,10 @@ import java.util.function.UnaryOperator;
 public class SudokuController {
     @FXML
     private GridPane boardGridPane;
-
     @FXML
     private Label titleLabel;
-
     @FXML
     private Button hintButton;
-
     @FXML
     private Button instructionsButton;
 
@@ -42,7 +35,7 @@ public class SudokuController {
 
     private int counterHelp = 0;
 
-    //ola este pedazo de codigo es pa los totemcitos xd
+    //cambio de totem
     @FXML
     private ImageView totem1;
     @FXML
@@ -133,6 +126,7 @@ public class SudokuController {
                                 counterHelp++;
                                 board.getBoard().get(row).set(col, i);
                                 textFields[row][col].setText(String.valueOf(i));
+                                textFields[row][col].setStyle("-fx-text-fill: #553d23; " + "-fx-font-size: 22px;" +   "-fx-effect: dropshadow(three-pass-box, white, 2, 1, 0, 0);");
                                 auxiliarTotemCounter++;
                                 switch (auxiliarTotemCounter) {
                                     case 1: totem1.setImage(UsedTotemImage);
@@ -232,6 +226,7 @@ public class SudokuController {
                     textField.setStyle(""); //QUITA CUALQUIER ERROR (O SEA MODIFICA DE NUEVO EL TEXT FIELD PARA QUE ESTE TRANSPARENTE
                 } else {
                      // LA ES BGIMAGEN ES BASICAMENTE UN BACKGROUND DE LA IMAGEN QUE ME ESTAN DANDO
+                    textField.setStyle("-fx-border-color: red");
                      textField.setBackground(new Background(bgImage)); // AQUI ASIGNO AL TEXT FIELD EL BG QUE CREE CON LA IMAGEN ALEATORIA
 
                     //SI EL NUMERO NO ES VALIDO (O SEA QUE SI HAY ALGUN ERROR DE COMPARACION PONE EL TEXTFIELD EN ROJO)
@@ -266,7 +261,17 @@ public class SudokuController {
                 System.out.println("Instructions");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("-----INSTRUCCIONES-----");
-                alert.setHeaderText("1. tralalero tralala\n2.brr brr patapim\n3.lirili larila");
+                alert.setHeaderText("Para completar el sudoku, debera tener en cuenta la siguientes reglas y consideraciones: ");
+                alert.setContentText(
+                        "----REGLAS----" +
+                        "\n1.La idea del juego es llenar todo el tablero con numeros del 1 al 6" +
+                        "\n2.Solo se permite el ingreso de caracteres del 1 al 6. NO se permiten letras, simbolos, decimales o numeros fuera de este rango" +
+                        "\n3.Si escribe un numero en determinada celda, este mismo numero no puede estar en su misma columna o fila" +
+                        "\n4.No se puede tener el mismo numero dos veces en un mismo bloque (notese que los bloques estan separados por lineas un poco mas gruesas)" +
+                        "\n----CONSIDERACIONES ADICIONALES----" +
+                        "\n* Usted cuenta con un boton llamado 'Pista', al presionarlo se le brindara una ayuda resolviendo una celda aleatoria del tablero, la cual estara resaltada con un borde brillante blanco"+
+                                "\n* Cuando ingrese numeros no validos, ya sea por repeticion de bloque, fila o columna, su celda se vera 'en llamas' y con un borde rojo, este no desaparecera hasta que realice la respectiva correcion" +
+                        "\n* Mucha suerte! <3");
                 alert.showAndWait();
             }
         });

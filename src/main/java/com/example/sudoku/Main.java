@@ -10,7 +10,6 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
        new SudokuStage();
-        System.out.println("prueba conexion repositorio GitHub!");
     }
 
     public static void main(String[] args) {
