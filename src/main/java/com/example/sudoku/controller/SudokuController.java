@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.function.UnaryOperator;
 
-public class SudokuController {
+public class SudokuController extends SudokuLogicAdapter {
     @FXML
     private GridPane boardGridPane;
     @FXML
@@ -92,7 +92,7 @@ public class SudokuController {
             new BackgroundSize(85, 60, false, false, false, false)
     );
 
-    private List<int[]> getEmptyCells() {
+    public List<int[]> getEmptyCells() {
         List<int[]> emptyCells = new ArrayList<>();//ARREGLO QUE GUARDA EL ARREGLO DE LAS TUPLAS
 
         for (int i = 0; i < textFields.length; i++) {
@@ -158,7 +158,7 @@ public class SudokuController {
     }
 
 
-    private void fillBoard() {
+    public void fillBoard() {
         board = new Board();
         board.printBoard();
 
@@ -200,7 +200,7 @@ public class SudokuController {
     }
 
     //ESTE ES EL EVENTO QUE SE HACE PARA CADA UNO DE LOS TEXT FIELDS
-    private void handleNumberTextField(TextField textField, int row, int col) {
+    public void handleNumberTextField(TextField textField, int row, int col) {
         UnaryOperator<TextFormatter.Change> filter = change -> {
             /*
             ESTE COSO QUE SE LLAMA NEW TEXT ES UN TIPO DE CONTROLADOR QUE LO QUE HACE ES BASICAMENTE LEER PRIMERO LO QUE SE ESTA INGRESANDO PARA DESPUES
