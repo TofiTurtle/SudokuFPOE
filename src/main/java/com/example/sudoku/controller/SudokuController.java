@@ -19,6 +19,13 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.function.UnaryOperator;
 
+/**
+ * Controller class for the Sudoku game interface.
+ * Manages game logic, user interactions, and visual elements.
+ *
+ * <p>This class handles board initialization, input validation,
+ * help functionality, and visual feedback for the Sudoku game.</p>
+ */
 public class SudokuController extends SudokuLogicAdapter {
     @FXML
     private GridPane boardGridPane;
@@ -30,12 +37,10 @@ public class SudokuController extends SudokuLogicAdapter {
     private Button instructionsButton;
 
     private Board board;
-
     private TextField[][] textFields = new TextField[6][6];
-
     private int counterHelp = 0;
 
-    //cambio de totem
+    // Totem images for help counter visualization
     @FXML
     private ImageView totem1;
     @FXML
@@ -51,11 +56,13 @@ public class SudokuController extends SudokuLogicAdapter {
 
     private int auxiliarTotemCounter = 0;
     private Image UsedTotemImage = new Image(getClass().getResource("/com/example/sudoku/images/Usedtoteminmortality.png").toExternalForm());
-    //hasta aqui llega la implementacion de la imagen del totem
 
     Font baseFont = Font.loadFont(getClass().getResourceAsStream("/com/example/sudoku/font/minecraft_font.ttf"), 10);
 
-
+    /**
+     * Initializes the game interface components.
+     * Sets up fonts, cursor, board, and event handlers.
+     */
     @FXML
     public void initialize() {
         if (baseFont != null) {
@@ -74,15 +81,14 @@ public class SudokuController extends SudokuLogicAdapter {
         });
 
         fillBoard();
-        hintButton.setOnAction(new HintButtonHandler()); //cambio de clase interna
+        hintButton.setOnAction(new HintButtonHandler());
         handleInstructions();
-
     }
 
+    // Visual feedback images for invalid input
     Image fuegoImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
             "/com/example/sudoku/images/fuego1.PNG"
     )));
-
     Image randomImage = fuegoImage;
     BackgroundImage bgImage = new BackgroundImage(
             randomImage,
@@ -92,13 +98,18 @@ public class SudokuController extends SudokuLogicAdapter {
             new BackgroundSize(85, 60, false, false, false, false)
     );
 
+    /**
+     * Retrieves coordinates of all empty cells in the Sudoku board.
+     *
+     * @return List of integer arrays where each array contains [row, col] coordinates
+     */
     public List<int[]> getEmptyCells() {
-        List<int[]> emptyCells = new ArrayList<>();//ARREGLO QUE GUARDA EL ARREGLO DE LAS TUPLAS
+        List<int[]> emptyCells = new ArrayList<>();
 
         for (int i = 0; i < textFields.length; i++) {
             for (int j = 0; j < textFields[i].length; j++) {
                 if (textFields[i][j].getText().isEmpty()) {
-                    emptyCells.add(new int[]{i, j});   //ESTO CREA UN ARREGLO Y LUEGO LO METE AL ARREGLO Q YA TENIAMOS
+                    emptyCells.add(new int[]{i, j});
                 }
             }
         }
@@ -106,6 +117,9 @@ public class SudokuController extends SudokuLogicAdapter {
         return emptyCells;
     }
 
+    /**
+     * Handles the hint button functionality by filling a random valid cell.
+     */
     private class HintButtonHandler implements EventHandler<ActionEvent> {
         private final Random rand = new Random();
 
@@ -134,7 +148,6 @@ public class SudokuController extends SudokuLogicAdapter {
                                 case 5 -> totem5.setImage(UsedTotemImage);
                                 case 6 -> totem6.setImage(UsedTotemImage);
                             }
-
                             break;
                         }
                     }
@@ -146,16 +159,12 @@ public class SudokuController extends SudokuLogicAdapter {
         }
     }
 
-
+    /**
+     * Fills the Sudoku board with initial numbers and sets up the UI grid.
+     */
     public void fillBoard() {
         board = new Board();
         board.printBoard();
-
-        Image backgroundImage = new Image(
-                Objects.requireNonNull(
-                        getClass().getResourceAsStream("/com/example/sudoku/images/piedra.jpg")
-                )
-        );
 
 
         for (int row = 0; row < board.getBoard().size(); row++) {
@@ -171,8 +180,6 @@ public class SudokuController extends SudokuLogicAdapter {
                 if (number > 0) {
                     textField.setText(String.valueOf(number));
                     textField.setEditable(false);
-
-
                 } else {
                     textField.setText("");
                     textField.setBackground(null);
@@ -188,13 +195,15 @@ public class SudokuController extends SudokuLogicAdapter {
         }
     }
 
-    //ESTE ES EL EVENTO QUE SE HACE PARA CADA UNO DE LOS TEXT FIELDS
+    /**
+     * Configures input validation and handling for Sudoku cell TextFields.
+     *
+     * @param textField The TextField to configure
+     * @param row The row index of the cell
+     * @param col The column index of the cell
+     */
     public void handleNumberTextField(TextField textField, int row, int col) {
         UnaryOperator<TextFormatter.Change> filter = change -> {
-            /*
-            ESTE COSO QUE SE LLAMA NEW TEXT ES UN TIPO DE CONTROLADOR QUE LO QUE HACE ES BASICAMENTE LEER PRIMERO LO QUE SE ESTA INGRESANDO PARA DESPUES
-            SI PONERLO EN EL TEXT FIELD Y LUEGO ALMACENARLO EN EL ARREGLO
-             */
             String newText = change.getControlNewText();
             if (newText.matches("[1-6]?")) {
                 return change;
@@ -208,21 +217,17 @@ public class SudokuController extends SudokuLogicAdapter {
         textField.setOnKeyReleased(event -> {
             String input = textField.getText().trim();
             if (!input.isEmpty()) {
-                int number = Integer.parseInt(input); //GUARDA EL NUMERO DESPUES DE QUE SE VERIFIQUE Y DESPUES DE QUE SE SUELTA LA TECLA
-                boolean isValid = board.isValid(row, col, number); // CREA UN BOOLEANO CON LA FUNCION DE ISVALID CON EL NUMERO QUE SE LE INGRESO
+                int number = Integer.parseInt(input);
+                boolean isValid = board.isValid(row, col, number);
                 if (isValid) {
-                    board.getBoard().get(row).set(col, number); //SI EL NUMERO ES VALIDO ACTUALIZA EL TABLERO (EL ARREGLO)
-                    textField.setStyle(""); //QUITA CUALQUIER ERROR (O SEA MODIFICA DE NUEVO EL TEXT FIELD PARA QUE ESTE TRANSPARENTE
+                    board.getBoard().get(row).set(col, number);
+                    textField.setStyle("");
                 } else {
-                     // LA ES BGIMAGEN ES BASICAMENTE UN BACKGROUND DE LA IMAGEN QUE ME ESTAN DANDO
                     textField.setStyle("-fx-border-color: red");
-                     textField.setBackground(new Background(bgImage)); // AQUI ASIGNO AL TEXT FIELD EL BG QUE CREE CON LA IMAGEN ALEATORIA
-
-                    //SI EL NUMERO NO ES VALIDO (O SEA QUE SI HAY ALGUN ERROR DE COMPARACION PONE EL TEXTFIELD EN ROJO)
+                    textField.setBackground(new Background(bgImage));
                 }
-                System.out.println(isValid); //ESTO SIMPLEMENTE ES PQ ESTABA HACIENDO UNAS PRUEBAS CON LA FUNCION ISVALID
+                System.out.println(isValid);
             } else {
-                //CUANDO EL CAMPO NO SE LE INGRESA NADA O ESTE VACIO (INCLUSIVE CUANDO SE BORRA EL NUMERO) PONE UN CERO EN EL ARREGLO Y LE QUITA LOS BORDES AL TEXT FIELD
                 textField.setBackground(null);
                 board.getBoard().get(row).set(col, 0);
                 textField.setStyle("-fx-border-width: 0px;");
@@ -230,6 +235,11 @@ public class SudokuController extends SudokuLogicAdapter {
         });
     }
 
+    /**
+     * Handles mouse hover enter events on UI elements.
+     *
+     * @param mouseEvent The triggered mouse event
+     */
     public void handleMouseEntered(javafx.scene.input.MouseEvent mouseEvent) {
         Scene scene = hintButton.getScene();
         if (scene != null) {
@@ -237,12 +247,21 @@ public class SudokuController extends SudokuLogicAdapter {
         }
     }
 
+    /**
+     * Handles mouse hover exit events from UI elements.
+     *
+     * @param mouseEvent The triggered mouse event
+     */
     public void handleMouseExited(javafx.scene.input.MouseEvent mouseEvent) {
         Scene scene = hintButton.getScene();
         if (scene != null) {
             scene.setCursor(new ImageCursor(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/example/sudoku/images/icons8-espada-de-minecraft-30.png")))));
         }
     }
+
+    /**
+     * Configures and displays the game instructions dialog.
+     */
     public void handleInstructions() {
         instructionsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -253,14 +272,14 @@ public class SudokuController extends SudokuLogicAdapter {
                 alert.setHeaderText("Para completar el sudoku, debera tener en cuenta la siguientes reglas y consideraciones: ");
                 alert.setContentText(
                         "----REGLAS----" +
-                        "\n1.La idea del juego es llenar todo el tablero con numeros del 1 al 6" +
-                        "\n2.Solo se permite el ingreso de caracteres del 1 al 6. NO se permiten letras, simbolos, decimales o numeros fuera de este rango" +
-                        "\n3.Si escribe un numero en determinada celda, este mismo numero no puede estar en su misma columna o fila" +
-                        "\n4.No se puede tener el mismo numero dos veces en un mismo bloque (notese que los bloques estan separados por lineas un poco mas gruesas)" +
-                        "\n----CONSIDERACIONES ADICIONALES----" +
-                        "\n* Usted cuenta con un boton llamado 'Pista', al presionarlo se le brindara una ayuda resolviendo una celda aleatoria del tablero, la cual estara resaltada con un borde brillante blanco"+
+                                "\n1.La idea del juego es llenar todo el tablero con numeros del 1 al 6" +
+                                "\n2.Solo se permite el ingreso de caracteres del 1 al 6. NO se permiten letras, simbolos, decimales o numeros fuera de este rango" +
+                                "\n3.Si escribe un numero en determinada celda, este mismo numero no puede estar en su misma columna o fila" +
+                                "\n4.No se puede tener el mismo numero dos veces en un mismo bloque (notese que los bloques estan separados por lineas un poco mas gruesas)" +
+                                "\n----CONSIDERACIONES ADICIONALES----" +
+                                "\n* Usted cuenta con un boton llamado 'Pista', al presionarlo se le brindara una ayuda resolviendo una celda aleatoria del tablero, la cual estara resaltada con un borde brillante blanco"+
                                 "\n* Cuando ingrese numeros no validos, ya sea por repeticion de bloque, fila o columna, su celda se vera 'en llamas' y con un borde rojo, este no desaparecera hasta que realice la respectiva correcion" +
-                        "\n* Mucha suerte! <3 |-|l-||-|_");
+                                "\n* Mucha suerte! <3 |-|l-||-|_");
                 alert.showAndWait();
             }
         });
