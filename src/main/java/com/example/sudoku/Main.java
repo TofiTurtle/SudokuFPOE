@@ -24,6 +24,9 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         System.out.println("Hello Worldasdasdsdasd");
         new SudokuStage();
+
+        System.out.println("OLA OLA ESTO ES UNA PRUEBA DE MI RAMA");
+        System.out.println("OLA OLA ESTO ES UNA PRUEBA segunda corregida xd");
     }
 
     /**
