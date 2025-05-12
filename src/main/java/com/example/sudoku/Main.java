@@ -21,6 +21,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         new SudokuStage();
+
+        System.out.println("OLA OLA ESTO ES UNA PRUEBA DE MI RAMA");
     }
 
     /**
