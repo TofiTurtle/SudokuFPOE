@@ -19,8 +19,10 @@ public class Main extends Application {
      * @throws IOException If there's an error loading the FXML file for the game interface
      */
     //comentario papuloso para probar conflictos xd
+
     @Override
     public void start(Stage stage) throws IOException {
+        System.out.println("Hello Worldasdasdsdasd");
         new SudokuStage();
     }
 
