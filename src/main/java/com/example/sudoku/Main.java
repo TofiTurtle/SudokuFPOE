@@ -25,7 +25,7 @@ public class Main extends Application {
         System.out.println("Hello Worldasdasdsdasd");
         new SudokuStage();
 
-        System.out.println("TUNG TUNG TUNG TUNG TUNG SAHURRRRR");
+        System.out.println("TRIPI TROPI TROPA TRIPA");
         System.out.println("OLA OLA ESTO ES UNA PRUEBA segunda corregida xd");
     }
 
