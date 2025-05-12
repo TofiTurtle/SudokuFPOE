@@ -23,7 +23,7 @@ public class Main extends Application {
         new SudokuStage();
 
         System.out.println("OLA OLA ESTO ES UNA PRUEBA DE MI RAMA");
-        System.out.println("OLA OLA ESTO ES UNA PRUEBA segunda");
+        System.out.println("OLA OLA ESTO ES UNA PRUEBA segunda corregida xd");
     }
 
     /**
