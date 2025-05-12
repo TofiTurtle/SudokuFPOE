@@ -18,6 +18,7 @@ public class Main extends Application {
      * @param stage The primary stage provided by JavaFX (not used in this implementation)
      * @throws IOException If there's an error loading the FXML file for the game interface
      */
+    //comentario papuloso para probar conflictos xd
     @Override
     public void start(Stage stage) throws IOException {
         new SudokuStage();
